@@ -1,5 +1,77 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script>
+    let chartarea = {
+        init: function () {
+            this.getdata();
+        },
+        getdata: function () {
+            $.ajax({
+                url: '/chartarea',
+                success: function (result) {
+                    chartarea.display(result);
+                }
+            })
+        },
+        display: function (result) {
+            Highcharts.chart('chartarea', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: null
+                },
+                subtitle: {
+                    text: 'Source: <a href="https://worldpopulationreview.com/world-cities" target="_blank">World Population Review</a>'
+                },
+                xAxis: {
+                    type: 'category',
+                    labels: {
+                        rotation: -45,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Population (millions)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: 'Population in 2021: <b>{point.y:.1f} millions</b>'
+                },
+                series: [{
+                    name: 'Population',
+                    data: result,
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        format: '{point.y:.1f}', // one decimal
+                        y: 10, // 10 pixels down from the top
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+
+        }
+    }
+
+    $(function () {
+        chartarea.init();
+    })
+</script>
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -104,7 +176,7 @@
     <div class="row">
 
         <!-- Area Chart -->
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-8 col-lg-7" id="container">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div
@@ -127,8 +199,8 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
+                    <div class="chart-area" id="chartarea">
+
                     </div>
                 </div>
             </div>

@@ -22,5 +22,6 @@ public class MainController {
         model.addAttribute("contents", "tables");
         return "index";
     }
+
 }
 
